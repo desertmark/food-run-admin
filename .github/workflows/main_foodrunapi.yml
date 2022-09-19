@@ -6,8 +6,8 @@ name: Build and deploy Node.js app to Azure Web App - foodrunapi
 on:
   push:
     paths:
-      - "./backend/*"
-      - "./.github/workflows/main_foodrunapi.yaml"
+      - "backend/*"
+      - ".github/workflows/main_foodrunapi.yaml"
     branches:
       - main
   workflow_dispatch:

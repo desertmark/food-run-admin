@@ -23,18 +23,6 @@ const {
   AUTH_DISCOVERY_URL,
 } = process.env;
 
-const getServiceAccount = () => {
-  try {
-    const serviceAccount = JSON.parse(
-      Buffer.from(FIREBASE_BASE_64_SERVICE_ACCOUNT, 'base64').toString(),
-    );
-    console.log('Service account parsed');
-    return serviceAccount;
-  } catch (error) {
-    console.error('Failed to parse FIREBASE_BASE_64_SERVICE_ACCOUNT');
-  }
-};
-
 export interface IConfig {
   port: string;
   firebase: {

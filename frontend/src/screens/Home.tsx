@@ -1,4 +1,10 @@
-import { Box, Button, Container, Typography as Text } from "@mui/material";
+import {
+  Box,
+  Button,
+  Container,
+  Link,
+  Typography as Text,
+} from "@mui/material";
 import { FC } from "react";
 import { Logo } from "../components/Logo";
 import { Screen } from "../components/Screen";
@@ -15,7 +21,11 @@ export const HomeScreen: FC = () => (
       <Logo sx={{ fontSize: 100 }} />
       <Text variant="h5">Don't Have the app yet?</Text>
       <Text variant="h6">Download Food Run right now!</Text>
-      <Button sx={{ marginTop: 3 }} variant="contained">
+      <Button
+        href="https://expo.dev/artifacts/eas/sUwf7ngbPVKogiEJ3BxBtD.apk"
+        sx={{ marginTop: 3 }}
+        variant="contained"
+      >
         Download
       </Button>
     </Box>

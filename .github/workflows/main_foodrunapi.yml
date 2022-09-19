@@ -40,7 +40,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: node-app
-          path: node_app.tar
+          path: nest.tar
 
   deploy:
     runs-on: ubuntu-latest

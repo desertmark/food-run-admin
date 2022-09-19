@@ -1,0 +1,19 @@
+{
+  "name": "food-run-admin",
+  "version": "1.0.0",
+  "description": "Food run admin web app stack (back & front)",
+  "workspaces": [
+    "frontend",
+    "backend"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@nestjs/cli": "^9.1.3",
+    "create-react-app": "^5.0.1",
+    "firebase-tools": "^11.9.0"
+  }
+}

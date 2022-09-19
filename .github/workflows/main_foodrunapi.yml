@@ -31,8 +31,10 @@ jobs:
           npm run build -w backend --if-present
           npm run test -w backend --if-present
 
-      - name: Tar files
-        run: tar -cvf node_app.tar .
+      # - name: Tar files
+      #   run: tar -cvf node_app.tar .
+      - name: Zip all files for upload between jobs
+        run: zip --symlinks -r nest.zip ./*
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
@@ -53,8 +55,8 @@ jobs:
         with:
           name: node-app
 
-      - name: Unzip
-        run: tar -xvf node_app.tar
+      # - name: Unzip
+      #   run: tar -xvf node_app.tar
 
       - name: "Deploy to Azure Web App"
         id: deploy-to-webapp
@@ -63,4 +65,4 @@ jobs:
           app-name: "foodrunapi"
           slot-name: "Production"
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_4B491A1B834E44FCBD4F718A50B50339 }}
-          package: .
+          package: nest.zip

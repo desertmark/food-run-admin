@@ -13,7 +13,12 @@
   "license": "ISC",
   "dependencies": {
     "@nestjs/cli": "^9.1.3",
+    "backend": "file:backend",
     "create-react-app": "^5.0.1",
-    "firebase-tools": "^11.9.0"
+    "dotenv": "^16.0.2",
+    "firebase-admin": "^11.0.1",
+    "firebase-tools": "^11.9.0",
+    "frontend": "file:frontend",
+    "react-router-dom": "^6.4.0"
   }
 }

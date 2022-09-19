@@ -66,3 +66,4 @@ jobs:
           slot-name: "Production"
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_4B491A1B834E44FCBD4F718A50B50339 }}
           package: nest.zip
+          startUpCommand: 'npm run start:prod -w backend'

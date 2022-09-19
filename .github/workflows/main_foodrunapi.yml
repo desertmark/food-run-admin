@@ -27,7 +27,7 @@ jobs:
       - name: npm install, build, and test
         run: |
 
-          npm install
+          npm install -w backend
           npm run build -w backend --if-present
           npm run test -w backend --if-present
 
@@ -58,3 +58,4 @@ jobs:
           slot-name: "Production"
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_4B491A1B834E44FCBD4F718A50B50339 }}
           package: .
+          startup-command: npm run start:prod -w backend

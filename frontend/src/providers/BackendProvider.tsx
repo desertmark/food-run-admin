@@ -9,9 +9,13 @@ import {
 } from "react";
 import { BackendApi, GetConfigResponse } from "../api/backend.api";
 import { backendConfig } from "../configs/backend";
+import { useAppState } from "./AppProvider";
+import { useFirebase } from "./FirebaseProvider";
 
 export interface BackendState {
   config: GetConfigResponse;
+  users: any;
+  loadUsers: any;
 }
 const BackendContext = createContext<BackendState>(null as any as BackendState);
 
@@ -21,9 +25,13 @@ export const useBackend = () => {
 export const BackendProvider: FC<PropsWithChildren<unknown>> = ({
   children,
 }) => {
+  // Contexts
+  const { oAuthCredentials, idTokenReuslt } = useFirebase();
+  const { setIsLoading } = useAppState();
   // State
   const [backend] = useState<BackendApi>(new BackendApi(backendConfig.apiUrl));
   const [config, setConfig] = useState<GetConfigResponse>({} as any);
+  const [users, setUsers] = useState<any>();
 
   // Methods
   const loadConfig = useCallback(async () => {
@@ -33,13 +41,29 @@ export const BackendProvider: FC<PropsWithChildren<unknown>> = ({
     }
   }, [backend]);
 
+  const loadUsers = useCallback(async () => {
+    try {
+      // setIsLoading(true);
+      const users = await backend.getUsers();
+      setUsers(users);
+    } finally {
+      // setIsLoading(false);
+    }
+  }, [backend]);
+
   // Effects
   useEffect(() => {
     loadConfig();
   }, [loadConfig]);
 
+  useEffect(() => {
+    if (idTokenReuslt?.token) {
+      backend.setAccessToken(idTokenReuslt?.token!);
+    }
+  }, [backend, idTokenReuslt?.token]);
+
   return (
-    <BackendContext.Provider value={{ config }}>
+    <BackendContext.Provider value={{ config, loadUsers, users }}>
       {children}
     </BackendContext.Provider>
   );

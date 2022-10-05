@@ -9,9 +9,9 @@ export const Providers: FC<PropsWithChildren<unknown>> = ({ children }) => {
   return (
     <ThemeProvider theme={theme}>
       <AppProvider>
-        <BackendProvider>
-          <FirebaseProvider>{children}</FirebaseProvider>
-        </BackendProvider>
+        <FirebaseProvider>
+          <BackendProvider>{children}</BackendProvider>
+        </FirebaseProvider>
       </AppProvider>
     </ThemeProvider>
   );

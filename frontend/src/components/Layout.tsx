@@ -1,15 +1,20 @@
 import { styled } from "@mui/material/styles";
 import { FC, HTMLAttributes, PropsWithChildren } from "react";
+import { useAppState } from "../providers/AppProvider";
 import { Header } from "./Header";
+import { Loader } from "./Loader";
 const LayoutComponent: FC<
   PropsWithChildren<HTMLAttributes<HTMLDivElement>>
-> = ({ children, ...rest }) => (
-  // eslint-disable-next-line jsx-a11y/aria-role
-  <div role="layout" {...rest}>
-    <Header />
-    {children}
-  </div>
-);
+> = ({ children, ...rest }) => {
+  const { isLoading } = useAppState();
+  return (
+    // eslint-disable-next-line jsx-a11y/aria-role
+    <div role="layout" {...rest}>
+      <Header />
+      {isLoading ? <Loader /> : children}
+    </div>
+  );
+};
 
 export const Layout = styled(LayoutComponent, { label: "layout" })(
   ({ theme }) => {

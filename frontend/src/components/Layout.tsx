@@ -3,6 +3,7 @@ import { FC, HTMLAttributes, PropsWithChildren } from "react";
 import { useAppState } from "../providers/AppProvider";
 import { Header } from "./Header";
 import { Loader } from "./Loader";
+import { Sidebar } from "./Sidebar";
 const LayoutComponent: FC<
   PropsWithChildren<HTMLAttributes<HTMLDivElement>>
 > = ({ children, ...rest }) => {
@@ -11,6 +12,7 @@ const LayoutComponent: FC<
     // eslint-disable-next-line jsx-a11y/aria-role
     <div role="layout" {...rest}>
       <Header />
+      <Sidebar />
       {isLoading ? <Loader /> : children}
     </div>
   );

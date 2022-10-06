@@ -8,9 +8,5 @@ export const UsersScreen: FC = () => {
   useEffect(() => {
     loadUsers();
   }, [loadUsers]);
-  return (
-    <Screen role="users" sx={{ justifyContent: "center" }}>
-      {JSON.stringify(users)}
-    </Screen>
-  );
+  return <Screen role="users" sx={{ justifyContent: "center" }}></Screen>;
 };

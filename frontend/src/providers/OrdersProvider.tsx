@@ -65,8 +65,12 @@ export const OrdersProvider: FC<PropsWithChildren<unknown>> = ({
   const updateOrderWindowStatus = useCallback(
     async (orderWindowStatus: OrderWindowStatusEnum) => {
       await orderWindowApi.setProperty("status", orderWindowStatus);
+      setOrderWindow({
+        ...orderWindow!,
+        status: orderWindowStatus,
+      });
     },
-    [orderWindowApi]
+    [orderWindow, orderWindowApi]
   );
 
   return (

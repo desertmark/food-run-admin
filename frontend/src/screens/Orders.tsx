@@ -1,5 +1,5 @@
 import { AccessTime, AccountCircle, Fastfood } from "@mui/icons-material";
-import { Divider, Typography as Text } from "@mui/material";
+import { Divider } from "@mui/material";
 import { FC, useEffect } from "react";
 import { OrderWindowControl } from "../components/OrderWindowControl";
 import { Screen } from "../components/Screen";

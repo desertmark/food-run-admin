@@ -29,7 +29,9 @@ export const Header: FC<unknown> = () => {
           </Text>
           {user && (
             <>
-              <Text>{user?.displayName}</Text>
+              <Text sx={{ display: { xs: "none", md: "block" } }}>
+                {user?.displayName}
+              </Text>
               <IconButton onClick={logout} color="inherit">
                 <Logout />
               </IconButton>

@@ -2,32 +2,39 @@ import {
   createContext,
   FC,
   PropsWithChildren,
-  useCallback,
   useContext,
   useEffect,
   useState,
 } from "react";
-import { auth, azureProvider } from "../configs/firebase";
+import { auth, azureProvider, database } from "../configs/firebase";
 import {
   getIdTokenResult,
   getRedirectResult,
   IdTokenResult,
-  OAuthCredential,
-  OAuthProvider,
   signInWithRedirect,
   User,
 } from "firebase/auth";
 import { useAppState } from "./AppProvider";
+import { useNavigate } from "react-router-dom";
+import { FirebaseObject, FirebaseObjectsEnum } from "../utils/FirebaseObject";
+import { IOrderWindow, ISchedule } from "../utils/schedule";
+import {
+  FirebaseCollection,
+  FirebaseCollectionEnum,
+} from "../utils/FirebaseCollection";
+import { IOrder } from "../utils/orders";
 export interface FirebaseState {
   login: () => void;
   logout: () => void;
   user?: User;
-  oAuthCredentials?: OAuthCredential;
   idTokenReuslt?: IdTokenResult;
+  schedule: FirebaseObject<ISchedule>;
+  orderWindow: FirebaseObject<IOrderWindow>;
+  orders: FirebaseCollection<IOrder>;
 }
 
 const FirebaseContext = createContext<FirebaseState>(
-  null as any as FirebaseState
+  {} as any as FirebaseState
 );
 
 export const useFirebase = () => {
@@ -38,9 +45,9 @@ export const FirebaseProvider: FC<PropsWithChildren<unknown>> = ({
 }) => {
   // Contexts
   const { setIsLoading } = useAppState();
+  const navigate = useNavigate();
   // State
   const [user, setUser] = useState<User>();
-  const [oAuthCredentials, setOAuthCredentials] = useState<OAuthCredential>();
   const [idTokenReuslt, setIdTokenResult] = useState<IdTokenResult>();
   // Methods
   /**
@@ -49,40 +56,22 @@ export const FirebaseProvider: FC<PropsWithChildren<unknown>> = ({
   const login = () => {
     signInWithRedirect(auth, azureProvider);
   };
+  const logout = async () => {
+    await auth.signOut();
+    setUser(undefined);
+    navigate("/");
+  };
+
+  // Effects
 
   /**
    * Tries to get login result.
    * It will succeed if we are being redirected back after login.
    * otherwise fails.
    */
-  const getLoginResult = useCallback(async () => {
-    const userCredentials = await getRedirectResult(auth);
-    // if (userCredentials?.user) {
-    //   const credentials = OAuthProvider.credentialFromResult(userCredentials)!;
-    //   saveCredentials(credentials);
-    //   setOAuthCredentials(credentials);
-    //   setUser(userCredentials?.user);
-    // }
-  }, []);
-
-  const logout = async () => {
-    await auth.signOut();
-    setUser(undefined);
-  };
-
-  // const saveCredentials = (credentials: OAuthCredential) => {
-  //   localStorage.setItem("session", JSON.stringify(credentials.toJSON()));
-  // };
-
-  // const recoverCredentials = (): OAuthCredential => {
-  //   const session = localStorage.getItem("session");
-  //   return OAuthProvider.credentialFromJSON(session!);
-  // };
-
-  // Effects
   useEffect(() => {
-    getLoginResult();
-  }, [getLoginResult]);
+    getRedirectResult(auth);
+  }, []);
 
   /**
    * Listen for auth state changes to load session if exists.
@@ -101,7 +90,18 @@ export const FirebaseProvider: FC<PropsWithChildren<unknown>> = ({
 
   return (
     <FirebaseContext.Provider
-      value={{ login, user, logout, oAuthCredentials, idTokenReuslt }}
+      value={{
+        orders: new FirebaseCollection(database, FirebaseCollectionEnum.Orders),
+        schedule: new FirebaseObject(database, FirebaseObjectsEnum.Schedule),
+        orderWindow: new FirebaseObject(
+          database,
+          FirebaseObjectsEnum.OrderWindow
+        ),
+        user,
+        idTokenReuslt,
+        login,
+        logout,
+      }}
     >
       {children}
     </FirebaseContext.Provider>

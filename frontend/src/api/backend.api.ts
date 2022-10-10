@@ -10,7 +10,6 @@ export class BackendApi {
   }
 
   setAccessToken(accessToken: string) {
-    console.log("setAccessToken");
     this.client = axios.create({
       baseURL: this.baseUrl,
       headers: {
@@ -30,12 +29,21 @@ export class BackendApi {
   }
 
   async getUsers() {
-    console.log("getUsers");
     try {
       const res = await this.client.get<any>("/users");
-      return res.data;
+      return res.data?.users;
     } catch (error) {
       console.error("Failed to get users", error);
+      throw error;
+    }
+  }
+
+  async getSchedule() {
+    try {
+      const res = await this.client.get<any>("/schedule");
+      return res.data;
+    } catch (error) {
+      console.error("Failed to get schedule", error);
       throw error;
     }
   }

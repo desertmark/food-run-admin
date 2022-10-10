@@ -14,8 +14,10 @@ import { useFirebase } from "./FirebaseProvider";
 
 export interface BackendState {
   config: GetConfigResponse;
-  users: any;
-  loadUsers: any;
+  users: any[];
+  schedule: any;
+  loadUsers: () => void;
+  loadSchedule: () => void;
 }
 const BackendContext = createContext<BackendState>(null as any as BackendState);
 
@@ -26,12 +28,13 @@ export const BackendProvider: FC<PropsWithChildren<unknown>> = ({
   children,
 }) => {
   // Contexts
-  const { oAuthCredentials, idTokenReuslt } = useFirebase();
+  const { idTokenReuslt } = useFirebase();
   const { setIsLoading } = useAppState();
   // State
   const [backend] = useState<BackendApi>(new BackendApi(backendConfig.apiUrl));
   const [config, setConfig] = useState<GetConfigResponse>({} as any);
   const [users, setUsers] = useState<any>();
+  const [schedule, setSchedule] = useState<any>();
 
   // Methods
   const loadConfig = useCallback(async () => {
@@ -43,11 +46,17 @@ export const BackendProvider: FC<PropsWithChildren<unknown>> = ({
 
   const loadUsers = useCallback(async () => {
     try {
-      // setIsLoading(true);
       const users = await backend.getUsers();
       setUsers(users);
     } finally {
-      // setIsLoading(false);
+    }
+  }, [backend]);
+
+  const loadSchedule = useCallback(async () => {
+    try {
+      const schedule = await backend.getSchedule();
+      setSchedule(schedule);
+    } finally {
     }
   }, [backend]);
 
@@ -63,7 +72,9 @@ export const BackendProvider: FC<PropsWithChildren<unknown>> = ({
   }, [backend, idTokenReuslt?.token]);
 
   return (
-    <BackendContext.Provider value={{ config, loadUsers, users }}>
+    <BackendContext.Provider
+      value={{ config, loadUsers, loadSchedule, users, schedule }}
+    >
       {children}
     </BackendContext.Provider>
   );

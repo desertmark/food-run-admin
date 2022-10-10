@@ -1,14 +1,14 @@
 import { FC } from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import { useFirebase } from "../providers/FirebaseProvider";
 import { HomeScreen } from "./Home";
+import { OrdersScreen } from "./Orders";
+import { ScheduleScreen } from "./Schedule";
 import { UsersScreen } from "./Users";
 
 export const Router: FC = () => {
   const { user } = useFirebase();
-  return (
-    <BrowserRouter>{user ? <PrivateRoutes /> : <PublicRoutes />}</BrowserRouter>
-  );
+  return user ? <PrivateRoutes /> : <PublicRoutes />;
 };
 
 export const PublicRoutes = () => (
@@ -19,6 +19,8 @@ export const PublicRoutes = () => (
 
 export const PrivateRoutes = () => (
   <Routes>
-    <Route path="/" element={<UsersScreen />}></Route>
+    <Route path="/" element={<OrdersScreen />}></Route>
+    <Route path="/users" element={<UsersScreen />}></Route>
+    <Route path="/schedule" element={<ScheduleScreen />}></Route>
   </Routes>
 );

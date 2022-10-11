@@ -16,8 +16,10 @@ import {
 } from "../utils/schedule";
 import { useFirebase } from "./FirebaseProvider";
 import { IOrder } from "../utils/orders";
-import { startAt } from "firebase/database";
+import { orderByChild, startAt } from "firebase/database";
 import { today } from "../utils/today";
+import { GeneralOrder } from "../utils/GeneralOrder";
+import { useFoodChoices } from "./FoodChoicesProvider";
 export interface OrdersState {
   loadSchedule: () => void;
   loadOrderWindow: () => void;
@@ -25,6 +27,7 @@ export interface OrdersState {
   updateOrderWindowStatus: (orderWindowStatus: OrderWindowStatusEnum) => void;
   orderWindow?: IOrderWindow;
   schedule?: ISchedule;
+  generalOrder?: GeneralOrder;
   orders: IOrder[];
 }
 
@@ -42,10 +45,12 @@ export const OrdersProvider: FC<PropsWithChildren<unknown>> = ({
     schedule: scheduleApi,
     orders: ordersApi,
   } = useFirebase();
+  const { foodChoices } = useFoodChoices();
   // State
   const [orderWindow, setOrderWindow] = useState<IOrderWindow>();
   const [schedule, setSchedule] = useState<ISchedule>();
   const [orders, setOrders] = useState<IOrder[]>([]);
+  const [generalOrder, setGeneralOrder] = useState<GeneralOrder>();
   // Methods
   const loadOrders = useCallback(async () => {
     const orders = await ordersApi.query("date", startAt(today()));
@@ -73,6 +78,43 @@ export const OrdersProvider: FC<PropsWithChildren<unknown>> = ({
     [orderWindow, orderWindowApi]
   );
 
+  const subscribeToOrders = useCallback(() => {
+    const updateMyOrder = (order: IOrder, key: string) =>
+      setOrders((orders) => {
+        order.orderId = key;
+        const orderIndex = orders.findIndex((o) => o.orderId === key);
+        // Update if exists
+        if (orderIndex !== -1) {
+          orders[orderIndex] = order;
+          return [...orders];
+        }
+        // Add if not
+        return [...orders, order];
+      });
+    const unsubscribeAddUpdate = ordersApi.onItemAddedOrUpdated(
+      updateMyOrder,
+      orderByChild("date"),
+      startAt(today())
+    );
+    const unsubscribedOnRemoved = ordersApi.onItemRemoved((item, key) =>
+      setOrders((orders) => {
+        return orders.filter((o) => o.orderId !== key);
+      })
+    );
+    return () => {
+      unsubscribeAddUpdate();
+      unsubscribedOnRemoved();
+    };
+  }, [ordersApi]);
+
+  useEffect(() => {
+    setGeneralOrder(new GeneralOrder(foodChoices, orders));
+  }, [orders, foodChoices]);
+
+  useEffect(() => {
+    return subscribeToOrders();
+  }, [subscribeToOrders]);
+
   return (
     <OrdersContext.Provider
       value={{
@@ -83,6 +125,7 @@ export const OrdersProvider: FC<PropsWithChildren<unknown>> = ({
         orderWindow,
         schedule,
         orders,
+        generalOrder,
       }}
     >
       {children}

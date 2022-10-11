@@ -7,8 +7,9 @@ import { ScheduleScreen } from "./Schedule";
 import { UsersScreen } from "./Users";
 
 export const Router: FC = () => {
-  const { user } = useFirebase();
-  return user ? <PrivateRoutes /> : <PublicRoutes />;
+  const { authState } = useFirebase();
+
+  return authState === "authenticated" ? <PrivateRoutes /> : <PublicRoutes />;
 };
 
 export const PublicRoutes = () => (

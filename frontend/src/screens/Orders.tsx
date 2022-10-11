@@ -1,22 +1,31 @@
 import { AccessTime, AccountCircle, Fastfood } from "@mui/icons-material";
-import { Divider } from "@mui/material";
+import { Chip, Divider } from "@mui/material";
+import { Box } from "@mui/system";
 import { FC, useEffect } from "react";
+import { GeneralOrderItem } from "../components/GeneralOrderItem";
+import { OrderItem } from "../components/OrderItem";
 import { OrderWindowControl } from "../components/OrderWindowControl";
 import { Screen } from "../components/Screen";
 import { ScreenTitle } from "../components/ScreenTitle";
 import { useOrders } from "../providers/OrdersProvider";
 
 export const OrdersScreen: FC = () => {
-  const { loadOrderWindow, updateOrderWindowStatus, loadOrders, orderWindow } =
-    useOrders();
+  const {
+    loadOrderWindow,
+    updateOrderWindowStatus,
+    loadOrders,
+    orderWindow,
+    generalOrder,
+    orders,
+  } = useOrders();
 
   useEffect(() => {
     loadOrderWindow();
   }, [loadOrderWindow]);
 
-  useEffect(() => {
-    loadOrders();
-  }, [loadOrders]);
+  // useEffect(() => {
+  //   loadOrders();
+  // }, [loadOrders]);
 
   return (
     <Screen role="orders" sx={{ gap: 2 }}>
@@ -45,7 +54,14 @@ export const OrdersScreen: FC = () => {
         subtitle
         caption="This is what you need to order."
       />
-
+      {generalOrder?.items?.map((item, index) => (
+        <GeneralOrderItem item={item} key={`general-order-item-${index}`} />
+      ))}
+      {!generalOrder?.items?.length && (
+        <Box display="flex" justifyContent="center">
+          <Chip label="No orders yet." color="secondary" />
+        </Box>
+      )}
       <Divider />
       <ScreenTitle
         text="Order Details"
@@ -53,6 +69,14 @@ export const OrdersScreen: FC = () => {
         subtitle
         caption="Check here who order each plate of the general order."
       />
+      {orders?.map((item, index) => (
+        <OrderItem order={item} key={`order-item-${index}`} />
+      ))}
+      {!orders?.length && (
+        <Box display="flex" justifyContent="center">
+          <Chip label="No orders yet." color="primary" />
+        </Box>
+      )}
     </Screen>
   );
 };

@@ -10,7 +10,6 @@ export const UsersScreen: FC = () => {
   useEffect(() => {
     loadUsers();
   }, [loadUsers]);
-
   return (
     <Screen role="users" sx={{ gap: 2 }}>
       <Text variant="h5">List of users</Text>

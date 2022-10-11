@@ -7,6 +7,7 @@ import {
   get,
   onChildAdded,
   onChildChanged,
+  onChildRemoved,
   orderByChild,
   push,
   query,
@@ -113,5 +114,16 @@ export class FirebaseCollection<T extends Record<string, any>> {
       unSubscribeOnChildAdded();
       unSubscribeOnChildChanged();
     };
+  }
+
+  onItemRemoved(
+    cb: (item: T, key: string) => void,
+    ...queryConstraints: QueryConstraint[]
+  ): Unsubscribe {
+    const q = query(this.collection, ...queryConstraints);
+    const parseDbSnapshot = (snapshot: DataSnapshot) => {
+      cb(snapshot.val(), snapshot.key!);
+    };
+    return onChildRemoved(q, parseDbSnapshot);
   }
 }

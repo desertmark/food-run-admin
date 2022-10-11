@@ -23,6 +23,8 @@ import {
   FirebaseCollectionEnum,
 } from "../utils/FirebaseCollection";
 import { IOrder } from "../utils/orders";
+import { IFoodChoice } from "../utils/food-choices";
+export type AuthState = "authenticated" | "loading" | "notAuthenticated";
 export interface FirebaseState {
   login: () => void;
   logout: () => void;
@@ -31,11 +33,21 @@ export interface FirebaseState {
   schedule: FirebaseObject<ISchedule>;
   orderWindow: FirebaseObject<IOrderWindow>;
   orders: FirebaseCollection<IOrder>;
+  foodChoices: FirebaseCollection<IFoodChoice>;
+  authState: AuthState;
+  setAuthState: (authState: AuthState) => void;
 }
-
-const FirebaseContext = createContext<FirebaseState>(
-  {} as any as FirebaseState
-);
+const firebaseState = {
+  orders: new FirebaseCollection(database, FirebaseCollectionEnum.Orders),
+  schedule: new FirebaseObject(database, FirebaseObjectsEnum.Schedule),
+  orderWindow: new FirebaseObject(database, FirebaseObjectsEnum.OrderWindow),
+  foodChoices: new FirebaseCollection(
+    database,
+    FirebaseCollectionEnum.FoodChoices
+  ),
+  authState: "loading",
+} as any as FirebaseState;
+const FirebaseContext = createContext<FirebaseState>(firebaseState);
 
 export const useFirebase = () => {
   return useContext(FirebaseContext);
@@ -48,6 +60,7 @@ export const FirebaseProvider: FC<PropsWithChildren<unknown>> = ({
   const navigate = useNavigate();
   // State
   const [user, setUser] = useState<User>();
+  const [authState, setAuthState] = useState<AuthState>("loading");
   const [idTokenReuslt, setIdTokenResult] = useState<IdTokenResult>();
   // Methods
   /**
@@ -83,7 +96,10 @@ export const FirebaseProvider: FC<PropsWithChildren<unknown>> = ({
         const idTokenResult = await getIdTokenResult(user);
         setIdTokenResult(idTokenResult);
         setUser(user);
+      } else {
+        setAuthState("notAuthenticated");
       }
+
       setIsLoading(false);
     });
   }, [setIsLoading]);
@@ -91,16 +107,13 @@ export const FirebaseProvider: FC<PropsWithChildren<unknown>> = ({
   return (
     <FirebaseContext.Provider
       value={{
-        orders: new FirebaseCollection(database, FirebaseCollectionEnum.Orders),
-        schedule: new FirebaseObject(database, FirebaseObjectsEnum.Schedule),
-        orderWindow: new FirebaseObject(
-          database,
-          FirebaseObjectsEnum.OrderWindow
-        ),
+        ...firebaseState,
         user,
         idTokenReuslt,
+        authState,
         login,
         logout,
+        setAuthState,
       }}
     >
       {children}

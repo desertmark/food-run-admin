@@ -20,7 +20,7 @@ export const useAppState = () => {
 };
 export const AppProvider: FC<PropsWithChildren<unknown>> = ({ children }) => {
   // State
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
   const openSidebar = () => {
     setIsSidebarOpen(true);

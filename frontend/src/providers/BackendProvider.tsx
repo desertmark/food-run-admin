@@ -9,15 +9,12 @@ import {
 } from "react";
 import { BackendApi, GetConfigResponse } from "../api/backend.api";
 import { backendConfig } from "../configs/backend";
-import { useAppState } from "./AppProvider";
 import { useFirebase } from "./FirebaseProvider";
 
 export interface BackendState {
   config: GetConfigResponse;
   users: any[];
-  schedule: any;
   loadUsers: () => void;
-  loadSchedule: () => void;
 }
 const BackendContext = createContext<BackendState>(null as any as BackendState);
 
@@ -28,13 +25,11 @@ export const BackendProvider: FC<PropsWithChildren<unknown>> = ({
   children,
 }) => {
   // Contexts
-  const { idTokenReuslt } = useFirebase();
-  const { setIsLoading } = useAppState();
+  const { idTokenReuslt, setAuthState } = useFirebase();
   // State
   const [backend] = useState<BackendApi>(new BackendApi(backendConfig.apiUrl));
   const [config, setConfig] = useState<GetConfigResponse>({} as any);
   const [users, setUsers] = useState<any>();
-  const [schedule, setSchedule] = useState<any>();
 
   // Methods
   const loadConfig = useCallback(async () => {
@@ -45,19 +40,8 @@ export const BackendProvider: FC<PropsWithChildren<unknown>> = ({
   }, [backend]);
 
   const loadUsers = useCallback(async () => {
-    try {
-      const users = await backend.getUsers();
-      setUsers(users);
-    } finally {
-    }
-  }, [backend]);
-
-  const loadSchedule = useCallback(async () => {
-    try {
-      const schedule = await backend.getSchedule();
-      setSchedule(schedule);
-    } finally {
-    }
+    const users = await backend.getUsers();
+    setUsers(users);
   }, [backend]);
 
   // Effects
@@ -68,13 +52,12 @@ export const BackendProvider: FC<PropsWithChildren<unknown>> = ({
   useEffect(() => {
     if (idTokenReuslt?.token) {
       backend.setAccessToken(idTokenReuslt?.token!);
+      setAuthState("authenticated");
     }
-  }, [backend, idTokenReuslt?.token]);
+  }, [backend, idTokenReuslt?.token, setAuthState]);
 
   return (
-    <BackendContext.Provider
-      value={{ config, loadUsers, loadSchedule, users, schedule }}
-    >
+    <BackendContext.Provider value={{ config, loadUsers, users }}>
       {children}
     </BackendContext.Provider>
   );

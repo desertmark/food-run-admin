@@ -1,4 +1,4 @@
-import { Divider, Drawer, Typography as Text } from "@mui/material";
+import { Divider, Drawer, Typography as Text, useTheme } from "@mui/material";
 import { AccountCircle, CalendarMonth, Fastfood } from "@mui/icons-material";
 import { useAppState } from "../providers/AppProvider";
 import { Box } from "@mui/system";
@@ -14,7 +14,7 @@ export const Sidebar = () => {
     navigate(path);
     closeSidebar();
   };
-
+  const { spacing } = useTheme();
   return (
     <Drawer anchor="left" open={isSidebarOpen} onClose={closeSidebar}>
       <Box role="sidebar" style={{ width: 250 }}>
@@ -23,8 +23,8 @@ export const Sidebar = () => {
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-            padding: 8,
-            gap: 8,
+            padding: spacing(2),
+            gap: spacing(2),
           }}
         >
           <Logo />

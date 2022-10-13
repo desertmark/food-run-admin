@@ -21,6 +21,7 @@ const {
   AUTH_APP_ID,
   AUTH_APP_SECRET,
   AUTH_DISCOVERY_URL,
+  AUTH_ADMIN_EMAIL,
 } = process.env;
 
 export interface IConfig {
@@ -40,6 +41,7 @@ export interface IConfig {
     clientId: string;
     discoveryUrl: string;
     clientSecret: string;
+    adminEmail: string;
   };
 }
 
@@ -60,6 +62,7 @@ export const config: IConfig = {
     clientId: AUTH_APP_ID,
     clientSecret: AUTH_APP_SECRET,
     discoveryUrl: AUTH_DISCOVERY_URL,
+    adminEmail: AUTH_ADMIN_EMAIL,
   },
 };
 

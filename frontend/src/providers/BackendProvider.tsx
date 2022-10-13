@@ -1,3 +1,5 @@
+import { Task } from "@mui/icons-material";
+import { wait } from "@testing-library/user-event/dist/utils";
 import {
   createContext,
   FC,
@@ -9,12 +11,14 @@ import {
 } from "react";
 import { BackendApi, GetConfigResponse } from "../api/backend.api";
 import { backendConfig } from "../configs/backend";
+import { useAppState } from "./AppProvider";
 import { useFirebase } from "./FirebaseProvider";
 
 export interface BackendState {
   config: GetConfigResponse;
   users: any[];
   loadUsers: () => void;
+  updateUser: (req: { uid: string; role: string }) => void;
 }
 const BackendContext = createContext<BackendState>(null as any as BackendState);
 
@@ -26,6 +30,7 @@ export const BackendProvider: FC<PropsWithChildren<unknown>> = ({
 }) => {
   // Contexts
   const { idTokenReuslt, setAuthState } = useFirebase();
+  const { waitFor } = useAppState();
   // State
   const [backend] = useState<BackendApi>(new BackendApi(backendConfig.apiUrl));
   const [config, setConfig] = useState<GetConfigResponse>({} as any);
@@ -34,15 +39,26 @@ export const BackendProvider: FC<PropsWithChildren<unknown>> = ({
   // Methods
   const loadConfig = useCallback(async () => {
     if (backend) {
+      const task = backend.getConfig();
       const config = await backend.getConfig();
+      waitFor(task);
       setConfig(config);
     }
-  }, [backend]);
+  }, [backend, waitFor]);
 
   const loadUsers = useCallback(async () => {
-    const users = await backend.getUsers();
+    const task = backend.getUsers();
+    const users = await task;
     setUsers(users);
-  }, [backend]);
+    waitFor(task);
+  }, [backend, waitFor]);
+
+  const updateUser = useCallback(
+    async (req: { uid: string; role: string }) => {
+      waitFor(backend.updateUser(req));
+    },
+    [backend, waitFor]
+  );
 
   // Effects
   useEffect(() => {
@@ -57,7 +73,14 @@ export const BackendProvider: FC<PropsWithChildren<unknown>> = ({
   }, [backend, idTokenReuslt?.token, setAuthState]);
 
   return (
-    <BackendContext.Provider value={{ config, loadUsers, users }}>
+    <BackendContext.Provider
+      value={{
+        config,
+        loadUsers,
+        users,
+        updateUser,
+      }}
+    >
       {children}
     </BackendContext.Provider>
   );

@@ -1,4 +1,4 @@
-import { Inject, Injectable, LoggerService } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { CONFIG_INJECTION_TOKEN, IConfig } from './config.model';
 import firebaseAdmin, {
   app as FirebaseApp,

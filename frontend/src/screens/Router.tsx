@@ -4,12 +4,20 @@ import { useFirebase } from "../providers/FirebaseProvider";
 import { HomeScreen } from "./Home";
 import { OrdersScreen } from "./Orders";
 import { ScheduleScreen } from "./Schedule";
+import { UnauthorizedScreen } from "./Unauthorized";
 import { UsersScreen } from "./Users";
 
 export const Router: FC = () => {
-  const { authState } = useFirebase();
+  const { authState, idTokenReuslt } = useFirebase();
+  const isAdmin = idTokenReuslt?.claims?.role === "admin";
 
-  return authState === "authenticated" ? <PrivateRoutes /> : <PublicRoutes />;
+  if (authState === "authenticated") {
+    if (isAdmin) {
+      return <PrivateRoutes />;
+    }
+    return <UnauthorizedRoute />;
+  }
+  return <PublicRoutes />;
 };
 
 export const PublicRoutes = () => (
@@ -23,5 +31,11 @@ export const PrivateRoutes = () => (
     <Route path="/" element={<OrdersScreen />}></Route>
     <Route path="/users" element={<UsersScreen />}></Route>
     <Route path="/schedule" element={<ScheduleScreen />}></Route>
+  </Routes>
+);
+
+export const UnauthorizedRoute = () => (
+  <Routes>
+    <Route path="/" element={<UnauthorizedScreen />} />
   </Routes>
 );

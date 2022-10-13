@@ -13,12 +13,13 @@ import { useAppState } from "../providers/AppProvider";
 export const Header: FC<unknown> = () => {
   const { login, logout, user } = useFirebase();
   const { openSidebar } = useAppState();
-
+  const { idTokenReuslt } = useFirebase();
+  const isAdmin = idTokenReuslt?.claims?.role === "admin";
   return (
     <div>
       <AppBar position="sticky">
         <Toolbar sx={{ gap: 1 }}>
-          {user && (
+          {isAdmin && (
             <IconButton color="inherit" onClick={openSidebar}>
               <Menu />
             </IconButton>
@@ -27,7 +28,7 @@ export const Header: FC<unknown> = () => {
           <Text variant="h6" sx={{ flexGrow: 1 }}>
             Food Run
           </Text>
-          {user && (
+          {isAdmin && (
             <>
               <Text sx={{ display: { xs: "none", md: "block" } }}>
                 {user?.displayName}

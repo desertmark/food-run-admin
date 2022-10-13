@@ -24,6 +24,7 @@ import {
 } from "../utils/FirebaseCollection";
 import { IOrder } from "../utils/orders";
 import { IFoodChoice } from "../utils/food-choices";
+import { wait } from "@testing-library/user-event/dist/utils";
 export type AuthState = "authenticated" | "loading" | "notAuthenticated";
 export interface FirebaseState {
   login: () => void;
@@ -56,7 +57,7 @@ export const FirebaseProvider: FC<PropsWithChildren<unknown>> = ({
   children,
 }) => {
   // Contexts
-  const { setIsLoading } = useAppState();
+  const { waitFor } = useAppState();
   const navigate = useNavigate();
   // State
   const [user, setUser] = useState<User>();
@@ -90,19 +91,20 @@ export const FirebaseProvider: FC<PropsWithChildren<unknown>> = ({
    * Listen for auth state changes to load session if exists.
    */
   useEffect(() => {
-    setIsLoading(true);
-    auth.onAuthStateChanged(async (user) => {
-      if (user) {
-        const idTokenResult = await getIdTokenResult(user);
-        setIdTokenResult(idTokenResult);
-        setUser(user);
-      } else {
-        setAuthState("notAuthenticated");
-      }
-
-      setIsLoading(false);
+    const task = new Promise<void>((res) => {
+      auth.onAuthStateChanged(async (user) => {
+        if (user) {
+          const idTokenResult = await getIdTokenResult(user);
+          setIdTokenResult(idTokenResult);
+          setUser(user);
+        } else {
+          setAuthState("notAuthenticated");
+        }
+        res();
+      });
     });
-  }, [setIsLoading]);
+    waitFor(task);
+  }, []);
 
   return (
     <FirebaseContext.Provider

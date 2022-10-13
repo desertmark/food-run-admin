@@ -26,6 +26,9 @@ export class AuthGuard implements CanActivate {
       const decodedToken = await this.firebase.admin
         .auth()
         .verifyIdToken(token);
+      if (decodedToken?.role !== 'admin') {
+        throw Error('Unauthorized');
+      }
       // TODO: set current user on a service for global usage, if needed.
       return !!decodedToken;
     } catch (error) {

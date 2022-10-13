@@ -38,6 +38,21 @@ export class BackendApi {
     }
   }
 
+  async updateUser({
+    uid,
+    role,
+  }: {
+    uid: string;
+    role: string;
+  }): Promise<void> {
+    try {
+      await this.client.patch<any>(`/users/${uid}`, { role });
+    } catch (error) {
+      console.error("Failed to get users", error);
+      throw error;
+    }
+  }
+
   async getSchedule() {
     try {
       const res = await this.client.get<any>("/schedule");

@@ -1,6 +1,6 @@
 import { Box, Button, Typography as Text } from "@mui/material";
 import { FC } from "react";
-import { Logo } from "../components/Logo";
+import { FoodRunLogo, Logo } from "../components/Logo";
 import { Screen } from "../components/Screen";
 import { useBackend } from "../providers/BackendProvider";
 
@@ -15,9 +15,21 @@ export const HomeScreen: FC = () => {
         alignItems="center"
         sx={{ gap: 1 }}
       >
-        <Logo sx={{ fontSize: 100 }} />
-        <Text variant="h5">Don't Have the app yet?</Text>
-        <Text variant="h6">Download Food Run right now!</Text>
+        <FoodRunLogo style={{ width: "75%" }} secondary />
+        <Text
+          variant="logo"
+          color="primary"
+          fontSize={28}
+          sx={{ marginBottom: 3 }}
+        >
+          Your food organized
+        </Text>
+        <Text variant="logo" color="primary">
+          Don't Have the app yet?
+        </Text>
+        <Text variant="logo" color="primary">
+          Download Food Run right now!
+        </Text>
         <Button
           href={config.androidDownloadUrl}
           sx={{ marginTop: 3 }}

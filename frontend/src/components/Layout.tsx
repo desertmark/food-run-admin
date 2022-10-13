@@ -6,11 +6,11 @@ import { Header } from "./Header";
 import { Hub } from "./Hub";
 import { Loader } from "./Loader";
 import { Sidebar } from "./Sidebar";
+
 const LayoutComponent: FC<
   PropsWithChildren<HTMLAttributes<HTMLDivElement>>
 > = ({ children, ...rest }) => {
   const { isLoading } = useAppState();
-
   return (
     // eslint-disable-next-line jsx-a11y/aria-role
     <div role="layout" {...rest}>

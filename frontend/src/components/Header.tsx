@@ -7,7 +7,7 @@ import {
 } from "@mui/material";
 import { FC } from "react";
 import { useFirebase } from "../providers/FirebaseProvider";
-import { Logo } from "./Logo";
+import { FoodRunLogo, Logo } from "./Logo";
 import { Logout, Menu } from "@mui/icons-material";
 import { useAppState } from "../providers/AppProvider";
 export const Header: FC<unknown> = () => {
@@ -24,10 +24,8 @@ export const Header: FC<unknown> = () => {
               <Menu />
             </IconButton>
           )}
-          <Logo />
-          <Text variant="h6" sx={{ flexGrow: 1 }}>
-            Food Run
-          </Text>
+          <FoodRunLogo size={64} />
+          <Text variant="h6" sx={{ flexGrow: 1 }}></Text>
           {isAdmin && (
             <>
               <Text sx={{ display: { xs: "none", md: "block" } }}>

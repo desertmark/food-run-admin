@@ -15,7 +15,7 @@ export const HomeScreen: FC = () => {
         alignItems="center"
         sx={{ gap: 1 }}
       >
-        <FoodRunLogo style={{ width: "75%" }} secondary />
+        <FoodRunLogo style={{ width: "75%", maxWidth: 500 }} secondary />
         <Text
           variant="logo"
           color="primary"

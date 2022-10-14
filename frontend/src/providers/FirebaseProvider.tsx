@@ -73,6 +73,7 @@ export const FirebaseProvider: FC<PropsWithChildren<unknown>> = ({
   const logout = async () => {
     await auth.signOut();
     setUser(undefined);
+    setIdTokenResult(undefined);
     navigate("/");
   };
 

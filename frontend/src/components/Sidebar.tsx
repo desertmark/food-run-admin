@@ -2,7 +2,7 @@ import { Divider, Drawer, Typography as Text, useTheme } from "@mui/material";
 import { AccountCircle, CalendarMonth, Fastfood } from "@mui/icons-material";
 import { useAppState } from "../providers/AppProvider";
 import { Box } from "@mui/system";
-import { Logo } from "./Logo";
+import { FoodRunLogo, Logo } from "./Logo";
 import { List } from "./List";
 import { useNavigate } from "react-router-dom";
 
@@ -22,31 +22,39 @@ export const Sidebar = () => {
           style={{
             display: "flex",
             justifyContent: "center",
-            alignItems: "center",
+            flexDirection: "column",
+            alignItems: "start",
             padding: spacing(2),
             gap: spacing(2),
           }}
         >
-          <Logo />
-          <Text variant="h6" sx={{ flexGrow: 1 }}>
-            Food Run
+          <FoodRunLogo
+            style={{ width: 135, height: 90, objectFit: "cover" }}
+            secondary
+          />
+          <Text
+            variant="logo"
+            sx={{ flexGrow: 1, width: "100%", textAlign: "right" }}
+            color="primary"
+          >
+            Your food orgnized
           </Text>
         </Box>
         <Divider />
         <List
           items={[
             {
-              icon: <Fastfood />,
+              icon: <Fastfood color="primary" />,
               text: "Orders",
               onClick: handleItemclick("/"),
             },
             {
-              icon: <AccountCircle />,
+              icon: <AccountCircle color="primary" />,
               text: "Users",
               onClick: handleItemclick("/users"),
             },
             {
-              icon: <CalendarMonth />,
+              icon: <CalendarMonth color="primary" />,
               text: "Schedule",
               onClick: handleItemclick("/schedule"),
             },

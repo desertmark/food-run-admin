@@ -1,11 +1,11 @@
 import { Box, Button, Typography as Text } from "@mui/material";
 import { FC } from "react";
-import { FoodRunLogo, Logo } from "../components/Logo";
+import { FoodRunLogo } from "../components/Logo";
 import { Screen } from "../components/Screen";
-import { useBackend } from "../providers/BackendProvider";
+import { useAppState } from "../providers/AppProvider";
 
 export const HomeScreen: FC = () => {
-  const { config } = useBackend();
+  const { config } = useAppState();
   return (
     <Screen role="home" sx={{ justifyContent: "center" }}>
       <Box

@@ -15,7 +15,6 @@ import { useAppState } from "./AppProvider";
 import { useFirebase } from "./FirebaseProvider";
 
 export interface BackendState {
-  config: GetConfigResponse;
   users: any[];
   loadUsers: () => void;
   updateUser: (req: { uid: string; role: string }) => void;
@@ -30,10 +29,9 @@ export const BackendProvider: FC<PropsWithChildren<unknown>> = ({
 }) => {
   // Contexts
   const { idTokenReuslt, setAuthState } = useFirebase();
-  const { waitFor } = useAppState();
+  const { waitFor, setConfig } = useAppState();
   // State
   const [backend] = useState<BackendApi>(new BackendApi(backendConfig.apiUrl));
-  const [config, setConfig] = useState<GetConfigResponse>({} as any);
   const [users, setUsers] = useState<any>();
 
   // Methods
@@ -44,7 +42,7 @@ export const BackendProvider: FC<PropsWithChildren<unknown>> = ({
       waitFor(task);
       setConfig(config);
     }
-  }, [backend, waitFor]);
+  }, [backend, setConfig, waitFor]);
 
   const loadUsers = useCallback(async () => {
     const task = backend.getUsers();
@@ -75,7 +73,6 @@ export const BackendProvider: FC<PropsWithChildren<unknown>> = ({
   return (
     <BackendContext.Provider
       value={{
-        config,
         loadUsers,
         users,
         updateUser,

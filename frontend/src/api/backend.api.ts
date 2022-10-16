@@ -66,4 +66,5 @@ export class BackendApi {
 
 export interface GetConfigResponse {
   androidDownloadUrl: string;
+  authTenant: string;
 }

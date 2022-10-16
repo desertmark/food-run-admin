@@ -6,7 +6,7 @@ import {
   useEffect,
   useState,
 } from "react";
-import { auth, azureProvider, database } from "../configs/firebase";
+import { auth, buildAuthProvider, database } from "../configs/firebase";
 import {
   getIdTokenResult,
   getRedirectResult,
@@ -24,7 +24,7 @@ import {
 } from "../utils/FirebaseCollection";
 import { IOrder } from "../utils/orders";
 import { IFoodChoice } from "../utils/food-choices";
-import { wait } from "@testing-library/user-event/dist/utils";
+import { useBackend } from "./BackendProvider";
 export type AuthState = "authenticated" | "loading" | "notAuthenticated";
 export interface FirebaseState {
   login: () => void;
@@ -57,8 +57,9 @@ export const FirebaseProvider: FC<PropsWithChildren<unknown>> = ({
   children,
 }) => {
   // Contexts
-  const { waitFor } = useAppState();
+  const { waitFor, config } = useAppState();
   const navigate = useNavigate();
+
   // State
   const [user, setUser] = useState<User>();
   const [authState, setAuthState] = useState<AuthState>("loading");
@@ -68,7 +69,8 @@ export const FirebaseProvider: FC<PropsWithChildren<unknown>> = ({
    * Starts login flow by redirecting to login page.
    */
   const login = () => {
-    signInWithRedirect(auth, azureProvider);
+    console.log(config?.authTenant);
+    signInWithRedirect(auth, buildAuthProvider(config?.authTenant));
   };
   const logout = async () => {
     await auth.signOut();

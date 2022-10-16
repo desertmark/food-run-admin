@@ -7,12 +7,15 @@ import {
   useEffect,
   useState,
 } from "react";
+import { GetConfigResponse } from "../api/backend.api";
 
 export interface AppState {
   isLoading: boolean;
   isSidebarOpen: boolean;
   isHubOpen: boolean;
   hubTemplate: JSX.Element;
+  config: GetConfigResponse;
+  setConfig: (config: GetConfigResponse) => void;
   waitFor: <T>(task: Promise<T>) => Promise<T>;
   openSidebar: () => void;
   closeSidebar: () => void;
@@ -31,6 +34,9 @@ export const AppProvider: FC<PropsWithChildren<unknown>> = ({ children }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
   const [isHubOpen, setIsHubOpen] = useState<boolean>(false);
   const [hubTemplate, setHubTemplate] = useState<JSX.Element>(<></>);
+  const [config, setConfig] = useState<GetConfigResponse>(
+    {} as GetConfigResponse
+  );
 
   const openSidebar = () => {
     setIsSidebarOpen(true);
@@ -74,6 +80,8 @@ export const AppProvider: FC<PropsWithChildren<unknown>> = ({ children }) => {
         isSidebarOpen,
         isHubOpen,
         hubTemplate,
+        config,
+        setConfig,
         waitFor,
         openSidebar,
         closeSidebar,

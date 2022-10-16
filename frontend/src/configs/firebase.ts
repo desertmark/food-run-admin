@@ -19,14 +19,14 @@ const firebaseConfig = {
   measurementId: "G-KGGKTW0XGW",
 };
 
-const buildAuthProvider = () => {
+export const buildAuthProvider = (tenant: string) => {
   const provider = new OAuthProvider("microsoft.com");
   provider.addScope("email");
   provider.addScope("openid");
   provider.addScope("profile");
   provider.setCustomParameters({
     prompt: "login",
-    tenant: "common",
+    tenant,
   });
   return provider;
 };
@@ -36,4 +36,3 @@ export const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const database = getDatabase(app);
 auth.setPersistence(browserLocalPersistence);
-export const azureProvider = buildAuthProvider();

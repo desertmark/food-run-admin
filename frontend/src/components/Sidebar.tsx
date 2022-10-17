@@ -1,5 +1,17 @@
-import { Divider, Drawer, Typography as Text, useTheme } from "@mui/material";
-import { AccountCircle, CalendarMonth, Fastfood } from "@mui/icons-material";
+import {
+  Divider,
+  Drawer,
+  Paper,
+  Typography as Text,
+  useTheme,
+} from "@mui/material";
+import {
+  AccountCircle,
+  CalendarMonth,
+  Fastfood,
+  Home,
+  Settings,
+} from "@mui/icons-material";
 import { useAppState } from "../providers/AppProvider";
 import { Box } from "@mui/system";
 import { FoodRunLogo, Logo } from "./Logo";
@@ -41,22 +53,51 @@ export const Sidebar = () => {
           </Text>
         </Box>
         <Divider />
+
+        <List
+          items={[
+            {
+              icon: <Home color="primary" />,
+              text: "Home",
+              onClick: handleItemclick("/"),
+            },
+            {
+              icon: <Fastfood color="primary" />,
+              text: "Place my order",
+              onClick: handleItemclick("/orders"),
+            },
+          ]}
+        />
+        <Box
+          p={spacing(2)}
+          mt={spacing(3)}
+          alignItems="center"
+          display="flex"
+          sx={{ gap: spacing(2) }}
+        >
+          <Settings color="primary" />
+          <Text variant="logo" color="primary">
+            Admin
+          </Text>
+        </Box>
+        <Divider />
+
         <List
           items={[
             {
               icon: <Fastfood color="primary" />,
               text: "Orders",
-              onClick: handleItemclick("/"),
+              onClick: handleItemclick("/admin"),
             },
             {
               icon: <AccountCircle color="primary" />,
               text: "Users",
-              onClick: handleItemclick("/users"),
+              onClick: handleItemclick("/admin/users"),
             },
             {
               icon: <CalendarMonth color="primary" />,
               text: "Schedule",
-              onClick: handleItemclick("/schedule"),
+              onClick: handleItemclick("/admin/schedule"),
             },
           ]}
         />

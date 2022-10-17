@@ -1,11 +1,11 @@
 import { CalendarMonth } from "@mui/icons-material";
 import { Divider, Typography as Text } from "@mui/material";
 import { FC, useEffect, useState } from "react";
-import { ScheduleSettings } from "../components/ScheduleSettings";
-import { Screen } from "../components/Screen";
-import { ScreenTitle } from "../components/ScreenTitle";
-import { useFirebase } from "../providers/FirebaseProvider";
-import { ISchedule, WeekDay } from "../utils/schedule";
+import { ScheduleSettings } from "../../../components/ScheduleSettings";
+import { Screen } from "../../../components/Screen";
+import { ScreenTitle } from "../../../components/ScreenTitle";
+import { useFirebase } from "../../../providers/FirebaseProvider";
+import { ISchedule, WeekDay } from "../../../utils/schedule";
 
 export const ScheduleScreen: FC = () => {
   const { schedule: scheduleApi } = useFirebase();

@@ -2,18 +2,17 @@ import { AccessTime, AccountCircle, Fastfood } from "@mui/icons-material";
 import { Chip, Divider } from "@mui/material";
 import { Box } from "@mui/system";
 import { FC, useEffect } from "react";
-import { GeneralOrderItem } from "../components/GeneralOrderItem";
-import { OrderItem } from "../components/OrderItem";
-import { OrderWindowControl } from "../components/OrderWindowControl";
-import { Screen } from "../components/Screen";
-import { ScreenTitle } from "../components/ScreenTitle";
-import { useOrders } from "../providers/OrdersProvider";
+import { GeneralOrderItem } from "../../../components/GeneralOrderItem";
+import { OrderItem } from "../../../components/OrderItem";
+import { OrderWindowControl } from "../../../components/OrderWindowControl";
+import { Screen } from "../../../components/Screen";
+import { ScreenTitle } from "../../../components/ScreenTitle";
+import { useOrders } from "../../../providers/OrdersProvider";
 
-export const OrdersScreen: FC = () => {
+export const AdminOrdersScreen: FC = () => {
   const {
     loadOrderWindow,
     updateOrderWindowStatus,
-    loadOrders,
     orderWindow,
     generalOrder,
     orders,
@@ -22,10 +21,6 @@ export const OrdersScreen: FC = () => {
   useEffect(() => {
     loadOrderWindow();
   }, [loadOrderWindow]);
-
-  // useEffect(() => {
-  //   loadOrders();
-  // }, [loadOrders]);
 
   return (
     <Screen role="orders" sx={{ gap: 2 }}>

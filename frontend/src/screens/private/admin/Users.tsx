@@ -1,10 +1,9 @@
 import { Box, Button, Divider, Typography as Text } from "@mui/material";
 import { FC, useEffect } from "react";
-import { List } from "../components/List";
-import { Screen } from "../components/Screen";
-import { IUser, UserItem } from "../components/UserItem";
-import { useAppState } from "../providers/AppProvider";
-import { useBackend } from "../providers/BackendProvider";
+import { Screen } from "../../../components/Screen";
+import { IUser, UserItem } from "../../../components/UserItem";
+import { useAppState } from "../../../providers/AppProvider";
+import { useBackend } from "../../../providers/BackendProvider";
 
 export const UsersScreen: FC = () => {
   const { users, loadUsers, updateUser } = useBackend();

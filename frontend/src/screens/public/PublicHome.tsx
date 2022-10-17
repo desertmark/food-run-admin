@@ -1,10 +1,10 @@
 import { Box, Button, Typography as Text } from "@mui/material";
 import { FC } from "react";
-import { FoodRunLogo } from "../components/Logo";
-import { Screen } from "../components/Screen";
-import { useAppState } from "../providers/AppProvider";
+import { FoodRunLogo } from "../../components/Logo";
+import { Screen } from "../../components/Screen";
+import { useAppState } from "../../providers/AppProvider";
 
-export const HomeScreen: FC = () => {
+export const PublicHomeScreen: FC = () => {
   const { config } = useAppState();
   return (
     <Screen role="home" sx={{ justifyContent: "center" }}>

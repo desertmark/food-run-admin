@@ -1,11 +1,13 @@
 import { FC } from "react";
 import { Route, Routes } from "react-router-dom";
 import { useFirebase } from "../providers/FirebaseProvider";
-import { HomeScreen } from "./Home";
-import { OrdersScreen } from "./Orders";
-import { ScheduleScreen } from "./Schedule";
+import { AdminOrdersScreen } from "./private/admin/AdminOrders";
+import { OrdersScreen } from "./private/Orders";
+import { ScheduleScreen } from "./private/admin/Schedule";
+import { UsersScreen } from "./private/admin/Users";
+import { PrivateHomeScreen } from "./private/PrivateHome";
+import { PublicHomeScreen } from "./public/PublicHome";
 import { UnauthorizedScreen } from "./Unauthorized";
-import { UsersScreen } from "./Users";
 
 export const Router: FC = () => {
   const { authState, idTokenReuslt } = useFirebase();
@@ -22,15 +24,17 @@ export const Router: FC = () => {
 
 export const PublicRoutes = () => (
   <Routes>
-    <Route path="/" element={<HomeScreen />}></Route>
+    <Route path="/" element={<PublicHomeScreen />}></Route>
   </Routes>
 );
 
 export const PrivateRoutes = () => (
   <Routes>
-    <Route path="/" element={<OrdersScreen />}></Route>
-    <Route path="/users" element={<UsersScreen />}></Route>
-    <Route path="/schedule" element={<ScheduleScreen />}></Route>
+    <Route path="/" element={<PrivateHomeScreen />}></Route>
+    <Route path="/orders" element={<OrdersScreen />}></Route>
+    <Route path="/admin" element={<AdminOrdersScreen />}></Route>
+    <Route path="/admin/users" element={<UsersScreen />}></Route>
+    <Route path="/admin/schedule" element={<ScheduleScreen />}></Route>
   </Routes>
 );
 

@@ -1,4 +1,4 @@
-import { createTheme } from "@mui/material";
+import { createTheme, Palette, PaletteColor, useTheme } from "@mui/material";
 declare module "@mui/material/styles" {
   interface TypographyVariants {
     logo: React.CSSProperties;
@@ -38,3 +38,8 @@ export const theme = createTheme({
     },
   },
 });
+
+export const useColor = (name: keyof Palette): PaletteColor => {
+  const theme = useTheme();
+  return theme.palette?.[name] as PaletteColor;
+};

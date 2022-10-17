@@ -24,7 +24,7 @@ import {
 } from "../utils/FirebaseCollection";
 import { IOrder } from "../utils/orders";
 import { IFoodChoice } from "../utils/food-choices";
-import { useBackend } from "./BackendProvider";
+
 export type AuthState = "authenticated" | "loading" | "notAuthenticated";
 export interface FirebaseState {
   login: () => void;
@@ -38,6 +38,7 @@ export interface FirebaseState {
   authState: AuthState;
   setAuthState: (authState: AuthState) => void;
 }
+
 const firebaseState = {
   orders: new FirebaseCollection(database, FirebaseCollectionEnum.Orders),
   schedule: new FirebaseObject(database, FirebaseObjectsEnum.Schedule),
@@ -48,11 +49,13 @@ const firebaseState = {
   ),
   authState: "loading",
 } as any as FirebaseState;
+
 const FirebaseContext = createContext<FirebaseState>(firebaseState);
 
 export const useFirebase = () => {
   return useContext(FirebaseContext);
 };
+
 export const FirebaseProvider: FC<PropsWithChildren<unknown>> = ({
   children,
 }) => {
@@ -65,6 +68,7 @@ export const FirebaseProvider: FC<PropsWithChildren<unknown>> = ({
   const [authState, setAuthState] = useState<AuthState>("loading");
   const [idTokenReuslt, setIdTokenResult] = useState<IdTokenResult>();
   // Methods
+
   /**
    * Starts login flow by redirecting to login page.
    */
@@ -72,6 +76,10 @@ export const FirebaseProvider: FC<PropsWithChildren<unknown>> = ({
     console.log(config?.authTenant);
     signInWithRedirect(auth, buildAuthProvider(config?.authTenant));
   };
+
+  /**
+   * Logs the user out and clears the local session.
+   */
   const logout = async () => {
     await auth.signOut();
     setUser(undefined);

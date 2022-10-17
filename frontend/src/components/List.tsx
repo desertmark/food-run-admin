@@ -1,11 +1,16 @@
+import { Settings } from "@mui/icons-material";
 import {
+  Chip,
+  Divider,
   List as MuiList,
   ListItem,
   ListItemButton,
   ListItemIcon,
   ListItemText,
+  useColorScheme,
 } from "@mui/material";
 import { FC } from "react";
+import { useColor } from "../configs/theme";
 
 export interface ListProps {
   items: ListItem[];

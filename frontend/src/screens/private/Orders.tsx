@@ -47,10 +47,16 @@ export const OrdersScreen: FC = () => {
           variant="contained"
           color="primary"
           onClick={() => confirmOrder(fc)}
+          sx={{ maxWidth: 768, width: "100%" }}
         >
           Yes
         </Button>
-        <Button variant="outlined" onClick={() => closeHub()}>
+
+        <Button
+          variant="outlined"
+          onClick={() => closeHub()}
+          sx={{ maxWidth: 768, width: "100%" }}
+        >
           Cancel
         </Button>
       </>

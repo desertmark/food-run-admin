@@ -1,8 +1,6 @@
-import { Divider, Drawer, Typography as Text, useTheme } from "@mui/material";
-import { AccountCircle, CalendarMonth, Fastfood } from "@mui/icons-material";
+import { Drawer } from "@mui/material";
 import { useAppState } from "../providers/AppProvider";
 import { Box } from "@mui/system";
-import { List } from "./List";
 
 export const Hub = () => {
   const { closeHub, isHubOpen, hubTemplate } = useAppState();
@@ -18,6 +16,7 @@ export const Hub = () => {
         role="hub"
         display="flex"
         flexDirection="column"
+        alignItems="center"
         padding={2}
         sx={{ gap: 2 }}
         height="80vh"

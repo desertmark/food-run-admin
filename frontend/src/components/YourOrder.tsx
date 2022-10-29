@@ -26,7 +26,7 @@ export const YourOrder: FC<YourOrderProps> = ({
   const { typography } = useTheme();
 
   return (
-    <Card>
+    <Card sx={{ maxWidth: 768, width: "100%" }}>
       <CardMedia
         component="img"
         height="256"

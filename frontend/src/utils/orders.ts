@@ -7,3 +7,7 @@ export interface IOrder {
   foodChoiceName: string;
   date: number;
 }
+
+export interface IMyOrder extends IOrder {
+  foodChoiceImage: string;
+}

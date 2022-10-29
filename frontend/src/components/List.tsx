@@ -1,9 +1,11 @@
 import { Settings } from "@mui/icons-material";
 import {
+  Avatar,
   Chip,
   Divider,
   List as MuiList,
   ListItem,
+  ListItemAvatar,
   ListItemButton,
   ListItemIcon,
   ListItemText,
@@ -17,6 +19,7 @@ export interface ListProps {
 }
 
 export interface ListItem {
+  image?: string;
   icon?: JSX.Element;
   text: string;
   onClick?: () => void;
@@ -25,10 +28,15 @@ export interface ListItem {
 export const List: FC<ListProps> = ({ items }) => {
   return (
     <MuiList>
-      {items?.map(({ icon, text, onClick }, index) => (
+      {items?.map(({ icon, text, onClick, image }, index) => (
         <ListItem disablePadding key={`list-item-${index}`} onClick={onClick}>
           <ListItemButton>
-            <ListItemIcon>{icon}</ListItemIcon>
+            {icon && <ListItemIcon>{icon}</ListItemIcon>}
+            {image && (
+              <ListItemAvatar>
+                <Avatar src={image} />
+              </ListItemAvatar>
+            )}
             <ListItemText primary={text} />
           </ListItemButton>
         </ListItem>

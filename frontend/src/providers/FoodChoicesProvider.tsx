@@ -26,7 +26,7 @@ export const FoodChoicesProvider: FC<PropsWithChildren<unknown>> = ({
   children,
 }) => {
   // Contexts
-  const { foodChoices: foodChoicesApi } = useFirebase();
+  const { foodChoices: foodChoicesApi, authState } = useFirebase();
   // State
   const [foodChoices, setFoodChoices] = useState<IFoodChoice[]>();
   // Methods
@@ -36,8 +36,10 @@ export const FoodChoicesProvider: FC<PropsWithChildren<unknown>> = ({
   }, [foodChoicesApi]);
 
   useEffect(() => {
-    loadFoodChoices();
-  }, [loadFoodChoices]);
+    if (authState === "authenticated") {
+      loadFoodChoices();
+    }
+  }, [loadFoodChoices, authState]);
 
   return (
     <FoodChoicesContext.Provider value={{ foodChoices, loadFoodChoices }}>

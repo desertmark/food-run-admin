@@ -1,5 +1,3 @@
-import { Task } from "@mui/icons-material";
-import { wait } from "@testing-library/user-event/dist/utils";
 import {
   createContext,
   FC,
@@ -9,7 +7,7 @@ import {
   useEffect,
   useState,
 } from "react";
-import { BackendApi, GetConfigResponse } from "../api/backend.api";
+import { BackendApi } from "../api/backend.api";
 import { backendConfig } from "../configs/backend";
 import { useAppState } from "./AppProvider";
 import { useFirebase } from "./FirebaseProvider";
@@ -29,7 +27,7 @@ export const BackendProvider: FC<PropsWithChildren<unknown>> = ({
 }) => {
   // Contexts
   const { idTokenReuslt, setAuthState } = useFirebase();
-  const { waitFor, setConfig } = useAppState();
+  const { setConfig, loader } = useAppState();
   // State
   const [backend] = useState<BackendApi>(new BackendApi(backendConfig.apiUrl));
   const [users, setUsers] = useState<any>();
@@ -37,25 +35,21 @@ export const BackendProvider: FC<PropsWithChildren<unknown>> = ({
   // Methods
   const loadConfig = useCallback(async () => {
     if (backend) {
-      const task = backend.getConfig();
-      const config = await backend.getConfig();
-      waitFor(task);
-      setConfig(config);
+      const task = backend.getConfig().then(setConfig);
+      loader.waitFor(task);
     }
-  }, [backend, setConfig, waitFor]);
+  }, [backend, setConfig, loader]);
 
   const loadUsers = useCallback(async () => {
-    const task = backend.getUsers();
-    const users = await task;
-    setUsers(users);
-    waitFor(task);
-  }, [backend, waitFor]);
+    const task = backend.getUsers().then(setUsers);
+    loader.waitFor(task);
+  }, [loader, backend]);
 
   const updateUser = useCallback(
     async (req: { uid: string; role: string }) => {
-      waitFor(backend.updateUser(req));
+      backend.updateUser(req);
     },
-    [backend, waitFor]
+    [backend]
   );
 
   // Effects

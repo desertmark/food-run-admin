@@ -60,7 +60,7 @@ export const FirebaseProvider: FC<PropsWithChildren<unknown>> = ({
   children,
 }) => {
   // Contexts
-  const { waitFor, config } = useAppState();
+  const { config, loader } = useAppState();
   const navigate = useNavigate();
 
   // State
@@ -114,8 +114,8 @@ export const FirebaseProvider: FC<PropsWithChildren<unknown>> = ({
         res();
       });
     });
-    waitFor(task);
-  }, []);
+    loader.waitFor(task);
+  }, [loader]);
 
   return (
     <FirebaseContext.Provider

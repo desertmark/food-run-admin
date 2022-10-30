@@ -4,19 +4,19 @@ import {
   PropsWithChildren,
   useCallback,
   useContext,
-  useEffect,
   useState,
 } from "react";
 import { GetConfigResponse } from "../api/backend.api";
+import { Loader } from "../utils/Loader";
 
 export interface AppState {
-  isLoading: boolean;
+  loader: Loader;
   isSidebarOpen: boolean;
   isHubOpen: boolean;
+  isLoading: boolean;
   hubTemplate: JSX.Element;
   config: GetConfigResponse;
   setConfig: (config: GetConfigResponse) => void;
-  waitFor: <T>(task: Promise<T>) => Promise<T>;
   openSidebar: () => void;
   closeSidebar: () => void;
   openHub: (template: JSX.Element) => void;
@@ -29,8 +29,11 @@ export const useAppState = () => {
 };
 export const AppProvider: FC<PropsWithChildren<unknown>> = ({ children }) => {
   // State
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [tasks, setTasks] = useState<any[]>([]);
+  const [, updateState] = useState<any>();
+  const forceUpdate = useCallback(() => updateState({}), []);
+
+  const [loader] = useState<Loader>(new Loader(forceUpdate));
+
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
   const [isHubOpen, setIsHubOpen] = useState<boolean>(false);
   const [hubTemplate, setHubTemplate] = useState<JSX.Element>(<></>);
@@ -55,41 +58,23 @@ export const AppProvider: FC<PropsWithChildren<unknown>> = ({ children }) => {
     setIsHubOpen(false);
   };
 
-  const waitFor = useCallback(async <T,>(task: Promise<T>): Promise<T> => {
-    setTasks((t) => [...t, task]);
-    task.finally(() => {
-      setTasks((currentTasks) => {
-        return currentTasks.filter((t) => t !== task);
-      });
-    });
-    return task;
-  }, []);
-
-  useEffect(() => {
-    if (tasks.length === 0) {
-      setIsLoading(false);
-    } else {
-      setIsLoading(true);
-    }
-  }, [tasks]);
-
   return (
     <AppContext.Provider
       value={{
-        isLoading,
+        loader,
         isSidebarOpen,
         isHubOpen,
         hubTemplate,
         config,
+        isLoading: loader.isLoading,
         setConfig,
-        waitFor,
         openSidebar,
         closeSidebar,
         openHub,
         closeHub,
       }}
     >
-      {children}
+      <>{children}</>
     </AppContext.Provider>
   );
 };
